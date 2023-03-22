@@ -190,6 +190,7 @@ internal class Program
             if (!File.Exists(nomearquivo))
             {
                 StreamWriter wr = new(nomearquivo);
+                wr.Close();
             }
         }
 
