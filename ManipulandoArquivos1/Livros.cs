@@ -10,17 +10,21 @@ namespace ManipulandoArquivos1
     {
         public string NomeDoLivro { get; set; }
         public string Autor { get; set; }
-        public int PáginaParou { get; set; }
+        public string Edicao { get; set; }
+        public string Isbn { get; set; }
 
-        public Livros(string nome, string autor) 
+        public Livros(string nome, string autor, string edicao, string isbn) 
         {
             NomeDoLivro = nome;
             Autor = autor;
+            Edicao = edicao;
+            Isbn = isbn;
+
         }
 
         public override string ToString()
         {
-            return $"Livro: {NomeDoLivro} | Autor: {Autor}";
+            return $"Livro: {NomeDoLivro} | Autor: {Autor} | Edição: {Edicao} | Isbn: {Isbn}";
         }
     }
 }

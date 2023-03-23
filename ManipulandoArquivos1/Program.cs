@@ -16,11 +16,11 @@ internal class Program
         CheckFiles("iniciados.txt");
 
         lines = QuantLines("totalbooks.txt");
-        WriteTolist(totalbooks, "totalbooks.txt", lines / 2);
+        WriteTolist(totalbooks, "totalbooks.txt", lines / 4);
         lines = QuantLines("emprestados.txt");
-        WriteTolist(emprestados, "emprestados.txt", lines / 2);
+        WriteTolist(emprestados, "emprestados.txt", lines / 4);
         lines = QuantLines("iniciados.txt");
-        WriteTolist(iniciados, "iniciados.txt", lines / 2);
+        WriteTolist(iniciados, "iniciados.txt", lines / 4);
 
         do
         {
@@ -134,12 +134,16 @@ internal class Program
         void AddBook(List<Livros> name)
         {
             Console.Clear();
-            Console.WriteLine("Adionar Livro-\n");
+            Console.WriteLine("Adicionar Livro-\n");
             Console.Write("Nome do livro: ");
             var namebook = Console.ReadLine();
             Console.Write("Autor: ");
             var autor = Console.ReadLine();
-            name.Add(new Livros(namebook.ToUpper(), autor.ToUpper()));
+            Console.Write("Edição: ");
+            var edicao = Console.ReadLine();
+            Console.Write("ISBN: ");
+            var isbn = Console.ReadLine();
+            name.Add(new Livros(namebook.ToUpper(), autor.ToUpper(), edicao.ToUpper(),isbn.ToUpper()));
         }
 
         int menu()
@@ -206,6 +210,8 @@ internal class Program
             {
                 texto += name[i].NomeDoLivro + "\n";
                 texto += name[i].Autor + "\n";
+                texto += name[i].Edicao + "\n";
+                texto += name[i].Isbn + "\n";
             }
             File.WriteAllText(path, texto);
         }
@@ -215,7 +221,7 @@ internal class Program
             StreamReader sr = new StreamReader(namefile);
             for (int i = 0; i < lines; i++)
             {
-                name.Add(new Livros(sr.ReadLine(), sr.ReadLine()));
+                name.Add(new Livros(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine()));
             }
             sr.Close();
         }
