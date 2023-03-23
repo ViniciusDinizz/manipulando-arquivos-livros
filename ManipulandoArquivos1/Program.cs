@@ -6,21 +6,21 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        int op = 0, linhas = 0;
+        int op = 0, lines = 0;
         List<Livros> totalbooks = new List<Livros>();
         List<Livros> emprestados = new List<Livros>();
         List<Livros> iniciados = new List<Livros>();
 
-        VerificarArquivos("totalbooks.txt");
-        VerificarArquivos("emprestados.txt");
-        VerificarArquivos("iniciados.txt");
+        CheckFiles("totalbooks.txt");
+        CheckFiles("emprestados.txt");
+        CheckFiles("iniciados.txt");
 
-        linhas = QuantlLinhas("totalbooks.txt");
-        GravarListaInicio(totalbooks, "totalbooks.txt", linhas / 2);
-        linhas = QuantlLinhas("emprestados.txt");
-        GravarListaInicio(emprestados, "emprestados.txt", linhas / 2);
-        linhas = QuantlLinhas("iniciados.txt");
-        GravarListaInicio(iniciados, "iniciados.txt", linhas / 2);
+        lines = QuantLines("totalbooks.txt");
+        WriteTolist(totalbooks, "totalbooks.txt", lines / 2);
+        lines = QuantLines("emprestados.txt");
+        WriteTolist(emprestados, "emprestados.txt", lines / 2);
+        lines = QuantLines("iniciados.txt");
+        WriteTolist(iniciados, "iniciados.txt", lines / 2);
 
         do
         {
@@ -29,7 +29,7 @@ internal class Program
             switch (op)
             {
                 case 1:
-                    AdicionarLivro(totalbooks);
+                    AddBook(totalbooks);
                     Console.Clear();
                     break;
                 case 2:
@@ -52,7 +52,7 @@ internal class Program
                     PrintList(totalbooks);
                     Console.Write("\nQual livro vai iniciar: ");
                     var livroinit = Console.ReadLine();
-                    CopiarLivro(totalbooks, iniciados, livroinit);
+                    CopyBook(totalbooks, iniciados, livroinit);
                     RemoveBook(totalbooks, livroinit);
                     break;
                 case 6:
@@ -60,7 +60,7 @@ internal class Program
                     PrintList(totalbooks);
                     Console.Write("\nQual livro emprestar: ");
                     var livro = Console.ReadLine();
-                    CopiarLivro(totalbooks, emprestados, livro);
+                    CopyBook(totalbooks, emprestados, livro);
                     RemoveBook(totalbooks, livro);
                     break;
                 case 7:
@@ -68,7 +68,7 @@ internal class Program
                     PrintList(emprestados);
                     Console.Write("\nQual livro foi devolvido: ");
                     var livrodev = Console.ReadLine();
-                    CopiarLivro(emprestados, totalbooks, livrodev);
+                    CopyBook(emprestados, totalbooks, livrodev);
                     RemoveBook(emprestados, livrodev);
                     break;
                 case 8:
@@ -76,7 +76,7 @@ internal class Program
                     PrintList(iniciados);
                     Console.Write("\nQual livro terminou: ");
                     var livroterm = Console.ReadLine();
-                    CopiarLivro(iniciados, totalbooks, livroterm);
+                    CopyBook(iniciados, totalbooks, livroterm);
                     RemoveBook(iniciados, livroterm);
                     Console.WriteLine();
                     break;
@@ -90,9 +90,9 @@ internal class Program
 
         } while (op != 9);
 
-        EscreverArquivoFinal(totalbooks, "totalbooks.txt");
-        EscreverArquivoFinal(emprestados, "emprestados.txt");
-        EscreverArquivoFinal(iniciados, "iniciados.txt");
+        WriteFinalFile(totalbooks, "totalbooks.txt");
+        WriteFinalFile(emprestados, "emprestados.txt");
+        WriteFinalFile(iniciados, "iniciados.txt");
 
         void PrintList(List<Livros> name)
         {
@@ -131,7 +131,7 @@ internal class Program
             }
         }
 
-        void AdicionarLivro(List<Livros> name)
+        void AddBook(List<Livros> name)
         {
             Console.Clear();
             Console.WriteLine("Adionar Livro-\n");
@@ -147,11 +147,16 @@ internal class Program
             int option;
             Console.WriteLine("Opções:\n1- Adicionar Livros\n2- Mostrar Emprestados\n3- Mostrar Prateleira\n" +
                 "4- Mostrar iniciados\n5- Iniciar Leitura\n6- Emprestar Livro\n7- Devolvido\n8- Concluir leitura\n9- Sair");
-            option = int.Parse(Console.ReadLine());
+            while(!int.TryParse(Console.ReadLine(),out option))
+            {
+                Console.Clear();
+                Console.WriteLine("### DIGITE UMA DAS OPÇÕES ###\n\nOpções:\n1- Adicionar Livros\n2- Mostrar Emprestados\n3- Mostrar Prateleira\n" +
+                "4- Mostrar iniciados\n5- Iniciar Leitura\n6- Emprestar Livro\n7- Devolvido\n8- Concluir leitura\n9- Sair");
+            }
             return option;
         }
 
-        void CopiarLivro(List<Livros> name, List<Livros> namecop, string namebook)
+        void CopyBook(List<Livros> name, List<Livros> namecop, string namebook)
         {
             int cont = 0;
             for (int i = 0; i < name.Count; i++)
@@ -172,11 +177,11 @@ internal class Program
             }
         }
 
-        string LivrosTotais(int quantlivros)
+        string TotalBook(int quantbooks)
         {
             string nomes = "";
             string nome;
-            for (int i = 1; i <= quantlivros; i++)
+            for (int i = 1; i <= quantbooks; i++)
             {
                 Console.Write($"{i}º Livro: ");
                 nome = Console.ReadLine();
@@ -185,7 +190,7 @@ internal class Program
             return nomes;
         }
 
-        void VerificarArquivos(string nomearquivo)
+        void CheckFiles(string nomearquivo)
         {
             if (!File.Exists(nomearquivo))
             {
@@ -194,7 +199,7 @@ internal class Program
             }
         }
 
-        void EscreverArquivoFinal(List<Livros> name, string path)
+        void WriteFinalFile(List<Livros> name, string path)
         {
             string texto = "";
             for (int i = 0; i < name.Count; i++)
@@ -205,19 +210,19 @@ internal class Program
             File.WriteAllText(path, texto);
         }
 
-        void GravarListaInicio(List<Livros> nome, string nomearqu, int linhas)
+        void WriteTolist(List<Livros> name, string namefile, int lines)
         {
-            StreamReader sr = new StreamReader(nomearqu);
-            for (int i = 0; i < linhas; i++)
+            StreamReader sr = new StreamReader(namefile);
+            for (int i = 0; i < lines; i++)
             {
-                nome.Add(new Livros(sr.ReadLine(), sr.ReadLine()));
+                name.Add(new Livros(sr.ReadLine(), sr.ReadLine()));
             }
             sr.Close();
         }
 
-        int QuantlLinhas(string arquivo)
+        int QuantLines(string file)
         {
-            StreamReader sr = new StreamReader(arquivo);
+            StreamReader sr = new StreamReader(file);
             int cont = 0;
             while (sr.ReadLine() != null)
             {
